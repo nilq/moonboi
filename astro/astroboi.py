@@ -6,17 +6,17 @@ import numpy as np
 if __name__ == '__main__':
     env = gym.make('LunarLander-v2')
     brain = Agent(
-        gamma = 0.99,
+        gamma=0.8,
         epsilon=1.0,
         batch_size=64,
         n_actions=4,
         input_dim=[8],
-        lr=0.003
+        lr=0.008
     )
 
     scores = []
     eps_history = []
-    n_games = 500
+    n_games = 3500
     score = 0
 
     for i in range(n_games):
@@ -33,6 +33,7 @@ if __name__ == '__main__':
         obs = env.reset()
 
         done = False
+
         
         while not done:
             action = brain.choose_action(obs)
@@ -43,4 +44,9 @@ if __name__ == '__main__':
             brain.store_transition(obs, action, reward, obs_, done)
             brain.learn()
 
+            if i % 200 == 0:
+                env.render()
+
             obs = obs_
+        
+        scores.append(score)
